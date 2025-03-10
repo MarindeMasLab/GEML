@@ -1,0 +1,2 @@
+# Integrating-Machine-Learning-with-Genome-Scale-Metabolic-Models-for-Precision-Trauma-Care
+This repository contains the code for the article "Integrating Machine Learning with Genome-Scale Metabolic Models for Precision Trauma Care." It combines machine learning and genome-scale metabolic models (GEMs) for ENDOTYPE stratification and metabolic target identification in trauma care. Contributions are welcome!
