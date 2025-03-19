@@ -1,0 +1,3 @@
+- Simulate patient treatment: Simulated treatment on ENDOTYPE D patients 
+- Parameter impact on treatment: Analysis of the effect of the simulated treatment targeting MSR and the impact of parameters (sex, age, cluster) on the treatment effectivity via Hierarchical Bayesian Analysis.
+- Relevant reaction analysis: Identification and summary of relevant reactions in a GB model by analyzing SHAP values
