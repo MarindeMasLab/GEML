@@ -1,4 +1,50 @@
 %%%% "Treat" patients and characterize
+ %{
+Integrating Machine Learning with Metabolic Models for Precision Trauma Care: Personalized ENDOTYPE Stratification and Metabolic Target Identification
+Authors:
+
+Igor Marin de Mas (Copenhagen University Hospital, Rigshospitalet)
+Lincoln Moura (Universidade Federal do Ceará)
+Fernando Luiz Marcelo Antunes (Universidade Federal do Ceará)
+Josep Maria Guerrero (Aalborg University)
+Pär Ingemar Johansson (Copenhagen University Hospital, Rigshospitalet)
+
+Introduction
+
+This script is designed to simulate patient treatment using genome-scale metabolic models. 
+The main objective is to tailor individual patients' metabolic models based on reference data 
+and perform viability analysis and sampling to generate treated models. This approach enables 
+the characterization of patients' metabolic responses to treatment and provides a basis for precision 
+medicine in trauma care.
+
+Workflow Overview
+
+1. Initialization: The working environment is set up and necessary data is loaded, including the 
+   patients' metabolic models.
+2. Model Loading: Individual patients' metabolic models are loaded from specific files.
+3. Adjustment of Bounds: The exchange reaction bounds are adjusted based on specific patient data 
+   and reference group data.
+4. Imposing Restrictions: Additional restrictions are applied to relevant reactions according to 
+   reference group data.
+5. Viability Analysis: The viability of the adjusted model is verified, and if necessary, restrictions 
+   are iteratively relaxed to restore viability.
+6. Sampling: Sampling is performed to generate a treated patient model.
+7. Model Saving: The treated model is saved to a file for further analysis.
+
+Libraries Used
+
+- COBRA Toolbox: Used for performing genome-scale metabolic modeling, including flux balance 
+  analysis (FBA) and sampling.
+  
+Key Features
+
+- Dynamic adjustment of metabolic reaction bounds based on specific patient and reference group data.
+- Iterative relaxation of restrictions to ensure model viability.
+- Efficient sampling to generate treated patient models.
+- Automated saving of treated models with unique names to facilitate identification.
+- Modular design that allows for workflow reuse and customization.
+%}
+
 % Initial parameters and tools
 initCobraToolbox;
 load('working_environment_treated_patients.mat');

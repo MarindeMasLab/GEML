@@ -1,3 +1,47 @@
+"""
+##############################################
+## Hierarchical Bayesian Analysis Script ##
+##############################################
+
+Integrating Machine Learning with Metabolic Models for Precision Trauma Care: Personalized ENDOTYPE Stratification and Metabolic Target Identification¶
+Authors:
+
+Igor Marin de Mas (Copenhagen University Hospital, Rigshospitalet)
+Lincoln Moura (Universidade Federal do Ceará)
+Fernando Luiz Marcelo Antunes (Universidade Federal do Ceará)
+Josep Maria Guerrero (Aalborg University)
+Pär Ingemar Johansson (Copenhagen University Hospital, Rigshospitalet)
+
+### Introduction
+This script implements a hierarchical Bayesian analysis to evaluate the impact of various parameters (e.g., age, sex, and cluster group) on patient improvement outcomes. The analysis leverages probabilistic programming to model complex interactions between variables and quantify uncertainty in parameter estimates. The results are used to assess model performance and provide insights into the relationships between predictors and outcomes.
+
+### Workflow Overview
+1. **Load Libraries**: Import the necessary Python libraries for data manipulation, statistical modeling, and visualization.
+2. **Load and Preprocess Data**: Load the dataset, preprocess it (e.g., standardize variables, handle missing data, and create clusters), and prepare it for Bayesian modeling.
+3. **Define Bayesian Model**: Specify the hierarchical Bayesian model, including priors, likelihoods, and interaction terms.
+4. **Model Sampling**: Perform Markov Chain Monte Carlo (MCMC) sampling to estimate posterior distributions of model parameters.
+5. **Posterior Predictive Checks**: Generate posterior predictive samples to evaluate model fit and compute performance metrics (e.g., WAIC, LOOIC, RMSE).
+6. **Visualization**: Create diagnostic plots (e.g., trace plots, posterior distributions, pair plots) to assess model convergence and interpret results.
+7. **Save Results**: Save model summaries, performance metrics, and posterior samples for further analysis.
+
+### Libraries Used
+- **NumPy**: For numerical computations and array manipulations.
+- **Pandas**: For data manipulation and preprocessing.
+- **Statsmodels**: For statistical modeling and formula-based regression analysis.
+- **Scikit-learn**: For preprocessing (e.g., standardization) and clustering (e.g., KMeans).
+- **PyMC**: For probabilistic programming and Bayesian inference.
+- **ArviZ**: For Bayesian model diagnostics, visualization, and performance evaluation.
+- **Matplotlib**: For creating visualizations and plots.
+
+### Key Features
+- Implements a hierarchical Bayesian model to capture complex interactions between predictors.
+- Includes preprocessing steps such as standardization, clustering, and handling categorical variables.
+- Provides posterior predictive checks to evaluate model fit and performance.
+- Computes key performance metrics, including WAIC, LOOIC, and RMSE.
+- Generates comprehensive visualizations for posterior distributions, trace plots, and pairwise parameter relationships.
+- Saves model summaries and performance metrics for reproducibility and further analysis.
+"""
+
 ########################
 ## 0. Load libraries ##
 ########################
@@ -17,6 +61,13 @@ import matplotlib.pyplot as plt
 ####################################
 
 # Updated DataFrame with Age
+'''
+Cluster: as defined in Marin de Mas et al. 2025 main Manuscript
+Sex: Patient geneder (1: male, 0: female)
+Age: Patient age in years
+Improvement: as defined in Marin de Mas et al. 2025, Supplementary Material 6, equation 1
+Patient_ID: Patient arbitrary number ID
+'''
 data = pd.DataFrame({
     'Cluster': [3, 3, 3, 4, 3, 4, 3, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1, 3, 4, 3, 3, 3, 4, 3, 3, 3, 4, 4, 3, 3, 3, 3, 3, 3, 3, 3],
     'Sex': [0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0],

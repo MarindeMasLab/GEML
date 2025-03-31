@@ -1,9 +1,50 @@
-% Cargar el archivo de datos
+%{
+Integrating Machine Learning with Metabolic Models for Precision Trauma Care: Relevant Reaction Analysis
+Authors:
+
+Igor Marin de Mas (Copenhagen University Hospital, Rigshospitalet)
+Lincoln Moura (Universidade Federal do Ceará)
+Fernando Luiz Marcelo Antunes (Universidade Federal do Ceará)
+Josep Maria Guerrero (Aalborg University)
+Pär Ingemar Johansson (Copenhagen University Hospital, Rigshospitalet)
+
+Introduction
+
+This script focuses on analyzing relevant metabolic reactions in genome-scale metabolic models. 
+The goal is to identify key reactions, associated genes, and metabolites that play a significant 
+role in patient-specific metabolic responses. This analysis supports the identification of potential 
+metabolic targets for precision trauma care.
+
+Workflow Overview
+
+1. Load Data: Load the workspace containing preprocessed data for relevant reactions.
+2. Define Relevant Reactions: Specify the subset of reactions to analyze based on predefined criteria.
+3. Extract Reaction Properties: Retrieve reaction IDs, names, EC numbers, subsystems, and gene-protein-reaction (GPR) rules.
+4. Gene Analysis: Identify genes associated with relevant reactions and map them to gene names using the NCBI API.
+5. Metabolite Analysis: Extract substrates and products for each relevant reaction.
+6. Subsystem Analysis: Summarize the distribution of relevant reactions across metabolic subsystems.
+7. Summary Tables: Generate summary tables for reactions, genes, metabolites, substrates, and products.
+8. Save Results: Save the analysis results to an Excel file for further exploration.
+
+Libraries Used
+
+- MATLAB: Used for implementing the workflow, performing data extraction, and generating summary tables.
+- NCBI API: Accessed to map Entrez gene IDs to gene names for better interpretability.
+
+Key Features
+
+- Comprehensive analysis of relevant metabolic reactions, including associated genes and metabolites.
+- Integration with the NCBI API for gene name mapping.
+- Generation of detailed summary tables for reactions, subsystems, substrates, and products.
+- Export of results to Excel for easy sharing and further analysis.
+- Modular design for easy customization and reuse.
+%}
+
+% Load the data file
 load("relevant_reactions_analysis_source_workspace.mat")
 
-% Definir las reacciones relevantes
+% Define the relevant reactions
 % K-fold
-% wrong_relevant_reactions = [457, 1213, 2464, 865, 2434, 106, 2886, 2497, 2396, 2484, 84, 194, 2425, 1556, 1528, 2228, 2576, 2467, 2454, 2195, 2300, 1319, 2420, 1973, 253, 1541, 2744, 258, 2414, 1734, 2451, 1534, 479, 2450, 343, 2480, 2388, 2666, 352, 2453, 1577, 157, 1314, 1812, 2433, 2277, 2483, 2393, 151, 2802, 2531, 2441, 2166, 2363, 315, 2490, 1535, 1665, 2485, 2671];
 %relevant_reactions_general = [229, 289, 1189, 1927, 893, 224, 2397, 823, 423, 2744, 1683, 2467, 2544, 343, 1560, 1315, 2592, 2249, 196, 2393, 329, 865, 2306, 2420, 2495, 1557, 1334, 1616, 885, 2305, 2394, 2882, 200, 480, 1185, 1782, 2450, 1556, 1321, 1958, 1163, 2276, 1951, 151, 2466, 311, 258, 2286, 2832, 1930, 1812, 2448, 2404, 457, 156, 1534, 2441, 169, 2474, 32, 2603, 1202, 1298, 590, 122, 1319, 2425, 2235, 84, 2568, 493, 2354, 960, 2481, 2388, 2378, 2266, 1630, 239, 2429, 2353, 1467, 988, 2166];
 %relevant_reactions_female = [2451, 2163, 2410, 2453, 2802, 2499, 2440, 1201, 2472, 2007, 1161, 1334, 1782, 2424, 2447, 2249, 1143, 2465, 256, 2397, 2427, 2353, 1314, 2250, 250, 263, 2288, 2432, 1812, 156, 2394, 2393, 1163, 1537, 2486, 415, 1299, 1967, 258, 1764, 89, 151, 2436, 2235, 2461, 2467, 416, 1767, 1639, 1250, 2276, 2443, 375, 2484, 926, 96, 1665, 2459, 2584, 1298, 2167, 1595, 2444, 2454, 2430, 2277, 2166, 2420, 194, 364, 344, 2460, 1202, 2449, 2412, 2439, 457, 114, 1528];
 %relevant_reactions_male = [598, 2882, 2390, 1315, 2744, 2249, 2397, 2453, 2235, 1927, 2354, 447, 1419, 2393, 2464, 2228, 423, 2443, 2305, 1185, 2388, 2300, 1314, 2425, 2467, 1827, 462, 1319, 2478, 2290, 2250, 2495, 2474, 1189, 2420, 1334, 2434, 232, 2446, 2030, 344, 2481, 1951, 2396, 107, 1143, 755, 426, 1163, 2288, 2193, 1747, 2466, 457, 1053, 885, 251, 2838, 32, 2272, 1764, 2276, 2084, 1683, 2394, 1594, 1639, 1782, 414, 2439, 2780, 2429, 865, 1338, 2306, 1930, 2197, 2015, 1556, 2452, 460, 1565];
@@ -18,7 +59,7 @@ relevant_reactions_shape_subset = [1616,1185, 2744, 2838, 1927, 2055, 1419];
 relevant_reactions = relevant_reactions_shape_subset;
 
 
-% Extraer propiedades de las reacciones relevantes
+% Extract properties of the relevant reactions
 relevant_rxn_id = sampleMetaOutC.rxns(relevant_reactions);
 relevant_rxn_name = sampleMetaOutC.rxnNames(relevant_reactions);
 relevant_rxn_EC = sampleMetaOutC.rxnECNumbers(relevant_reactions);
@@ -26,24 +67,24 @@ relevant_rxn_subsystem = sampleMetaOutC.subSystems(relevant_reactions);
 relevant_rxn_gpr = sampleMetaOutC.grRules(relevant_reactions);
 
 %%% Genes %%%
-% Identificar genes asociados a las reacciones relevantes
+% Identify genes associated with the relevant reactions
 relevant_reaction_genes = sampleMetaOutC.rules(relevant_reactions);
 
-% Inicializar una celda para almacenar los genes extraídos
+% Initialize a cell to store the extracted genes
 extracted_genes = cell(size(relevant_reactions))';
 
-% Iterar sobre las reacciones relevantes y extraer las reglas GPR
+% Iterate over the relevant reactions and extract the GPR rules
 for g = 1:length(relevant_reactions)
     gth_gpr = sampleMetaOutC.rules{relevant_reactions(g)};
-    % Usar expresiones regulares para encontrar todos los números
+    % Use regular expressions to find all numbers
     genes = regexp(gth_gpr, '\d+', 'match');
-    % Convertir los números encontrados a enteros
+    % Convert the found numbers to integers
     genes = str2double(genes);
-    % Almacenar el resultado en la celda
+    % Store the result in the cell
     extracted_genes{g} = genes;
 end
 
-% Convertir IDs de Entrez a nombres de genes usando la API de NCBI
+% Convert Entrez IDs to gene names using the NCBI API
 ncbi_gene_names = cell(size(extracted_genes));
 
 
@@ -104,177 +145,175 @@ for m = 1:length(relevant_reactions)
     mth_index_product = find(mth_S == 1);
     mth_relevant_substrates = sampleMetaOutC.metNames(mth_index_substrate);
     mth_relevant_products = sampleMetaOutC.metNames(mth_index_product);
-    % Convertir la celda de nombres de metabolitos a un vector de cadenas
+    % Convert the cell of metabolite names to a string vector
     relevant_substrates{m} = strjoin(mth_relevant_substrates, '; ');
     relevant_products{m} = strjoin(mth_relevant_products, '; ');
 end
 
 %% Summary Subsystem
-rxn_subsystems = cell2table(sampleMetaOutC.subSystems); % Extraer la columna 'RxnSubsystem' de sampleMetaOutC
-[unique_subsystems, ~, idx] = unique(rxn_subsystems); % Obtener subsistemas únicos y sus índices
-%filtered_idx = idx(cell2mat(relevant_reactions(:))); % Filtrar idx para obtener solo los índices relevantes
-filtered_idx = idx(relevant_reactions(:)); % Filtrar idx para obtener solo los índices relevantes
+rxn_subsystems = cell2table(sampleMetaOutC.subSystems); % Extract the 'RxnSubsystem' column from sampleMetaOutC
+[unique_subsystems, ~, idx] = unique(rxn_subsystems); % Get unique subsystems and their indices
+filtered_idx = idx(relevant_reactions(:)); % Filter idx to get only the relevant indices
 
-% Obtener los IDs de las reacciones relevantes
-relevant_rxn_id = relevant_rxn_id(:); % Asegurarse de que relevant_rxn_id sea un vector columna
-list_reactions_in_subsystem = accumarray(filtered_idx, (1:length(filtered_idx))', [], @(x) {strjoin(relevant_rxn_id(x), ', ')}); % Listar las reacciones en cada subsistema para las reacciones relevantes
-% Eliminar subsistemas sin reacciones
+% Get the IDs of the relevant reactions
+relevant_rxn_id = relevant_rxn_id(:); % Ensure relevant_rxn_id is a column vector
+list_reactions_in_subsystem = accumarray(filtered_idx, (1:length(filtered_idx))', [], @(x) {strjoin(relevant_rxn_id(x), ', ')}); % List the reactions in each subsystem for the relevant reactions
+% Remove subsystems without reactions
 non_empty_idx = ~cellfun('isempty', list_reactions_in_subsystem);
 list_reactions_in_subsystem = list_reactions_in_subsystem(non_empty_idx);
 unique_subsystems = unique_subsystems(find(non_empty_idx),:);
-%num_reactions_in_subsystem = accumarray(idx(cell2mat(relevant_reactions(:))), 1);
 num_reactions_in_subsystem = accumarray(idx(relevant_reactions(:)), 1);
 num_reactions_in_subsystem = num_reactions_in_subsystem(find(non_empty_idx),:);
-% Crear la tabla RxnSubsystems
+% Create the RxnSubsystems table
 summary_subsystems = table(unique_subsystems, num_reactions_in_subsystem, list_reactions_in_subsystem, ...
     'VariableNames', {'SubsystemName', 'NumReactions', 'ListReactions'});
 
 %% Summary Substrates
-% Inicializar celdas para almacenar los sustratos únicos y sus reacciones
+% Initialize cells to store unique substrates and their reactions
 unique_substrates = {};
 num_reactions_per_substrate = [];
 list_reactions_per_substrate = {};
 
-% Iterar sobre los sustratos relevantes
+% Iterate over the relevant substrates
 for i = 1:length(relevant_substrates)
-    % Separar los sustratos por ';'
+    % Split the substrates by ';'
     substrates = strsplit(relevant_substrates{i}, '; ');
     for j = 1:length(substrates)
         substrate = substrates{j};
-        % Buscar el índice del sustrato en la lista de sustratos únicos
+        % Find the index of the substrate in the list of unique substrates
         idx = find(strcmp(unique_substrates, substrate));
         if isempty(idx)
-            % Si el sustrato no está en la lista, añadirlo
+            % If the substrate is not in the list, add it
             unique_substrates{end+1} = substrate;
             num_reactions_per_substrate(end+1) = 1;
             list_reactions_per_substrate{end+1} = relevant_rxn_id{i};
         else
-            % Si el sustrato ya está en la lista, actualizar los contadores
+            % If the substrate is already in the list, update the counters
             num_reactions_per_substrate(idx) = num_reactions_per_substrate(idx) + 1;
             list_reactions_per_substrate{idx} = [list_reactions_per_substrate{idx}, ', ', relevant_rxn_id{i}];
         end
     end
 end
-% Crear la tabla Substrates
+% Create the Substrates table
 summary_substrates = table(unique_substrates', num_reactions_per_substrate', list_reactions_per_substrate', ...
     'VariableNames', {'SubstrateName', 'NumReactions', 'ListReactions'});
 
 
 %% Summary Products
-% Inicializar celdas para almacenar los sustratos únicos y sus reacciones
+% Initialize cells to store unique products and their reactions
 unique_products = {};
 num_reactions_per_product = [];
 list_reactions_per_product = {};
 
-% Iterar sobre los sustratos relevantes
+% Iterate over the relevant products
 for i = 1:length(relevant_products)
-    % Separar los sustratos por ';'
+    % Split the products by ';'
     products = strsplit(relevant_products{i}, '; ');
     for j = 1:length(products)
         product = products{j};
-        % Buscar el índice del sustrato en la lista de sustratos únicos
+        % Find the index of the product in the list of unique products
         idx = find(strcmp(unique_products, product));
         if isempty(idx)
-            % Si el sustrato no está en la lista, añadirlo
+            % If the product is not in the list, add it
             unique_products{end+1} = product;
             num_reactions_per_product(end+1) = 1;
             list_reactions_per_product{end+1} = relevant_rxn_id{i};
         else
-            % Si el sustrato ya está en la lista, actualizar los contadores
+            % If the product is already in the list, update the counters
             num_reactions_per_product(idx) = num_reactions_per_product(idx) + 1;
             list_reactions_per_product{idx} = [list_reactions_per_product{idx}, ', ', relevant_rxn_id{i}];
         end
     end
 end
-% Crear la tabla products
+% Create the Products table
 summary_products = table(unique_products', num_reactions_per_product', list_reactions_per_product', ...
     'VariableNames', {'productName', 'NumReactions', 'ListReactions'});
 
 
 %% Summary Metabolites
-% Inicializar celdas para almacenar los metabolitos únicos y sus reacciones
+% Initialize cells to store unique metabolites and their reactions
 unique_metabolites = {};
 num_reactions_per_metabolite = [];
 list_reactions_per_metabolite = {};
 
-% Usar un contenedor para evitar duplicados
+% Use a container to avoid duplicates
 metabolite_reaction_map = containers.Map('KeyType', 'char', 'ValueType', 'any');
 
-% Iterar sobre los sustratos y productos relevantes
+% Iterate over the relevant substrates and products
 for i = 1:length(relevant_substrates)
-    % Separar los sustratos por ';'
+    % Split the substrates by ';'
     substrates = strsplit(relevant_substrates{i}, '; ');
     for j = 1:length(substrates)
         metabolite = substrates{j};
         if isKey(metabolite_reaction_map, metabolite)
-            % Si el metabolito ya está en el mapa, actualizar los contadores
+            % If the metabolite is already in the map, update the counters
             reactions_set = metabolite_reaction_map(metabolite);
             reactions_set = [reactions_set, relevant_rxn_id{i}];
             metabolite_reaction_map(metabolite) = unique(reactions_set);
         else
-            % Si el metabolito no está en el mapa, añadirlo
+            % If the metabolite is not in the map, add it
             metabolite_reaction_map(metabolite) = {relevant_rxn_id{i}};
         end
     end
 end
 for i = 1:length(relevant_products)
-    % Separar los productos por ';'
+    % Split the products by ';'
     products = strsplit(relevant_products{i}, '; ');
     for j = 1:length(products)
         metabolite = products{j};
         if isKey(metabolite_reaction_map, metabolite)
-            % Si el metabolito ya está en el mapa, actualizar los contadores
+            % If the metabolite is already in the map, update the counters
             reactions_set = metabolite_reaction_map(metabolite);
             reactions_set = [reactions_set, relevant_rxn_id{i}];
             metabolite_reaction_map(metabolite) = unique(reactions_set);
         else
-            % Si el metabolito no está en el mapa, añadirlo
+            % If the metabolite is not in the map, add it
             metabolite_reaction_map(metabolite) = {relevant_rxn_id{i}};
         end
     end
 end
-% Convertir el mapa a celdas para crear la tabla
+% Convert the map to cells to create the table
 unique_metabolites = keys(metabolite_reaction_map);
 num_reactions_per_metabolite = cellfun(@length, values(metabolite_reaction_map));
 list_reactions_per_metabolite = cellfun(@(x) strjoin(x, ', '), values(metabolite_reaction_map), 'UniformOutput', false);
-% Crear la tabla Metabolites
+% Create the Metabolites table
 summary_metabolites = table(unique_metabolites', num_reactions_per_metabolite', list_reactions_per_metabolite', ...
     'VariableNames', {'MetaboliteName', 'NumReactions', 'ListReactions'});
 
 
 %% Summary Genes 
-% Inicializar celdas para almacenar los genes únicos y sus reacciones
+% Initialize cells to store unique genes and their reactions
 unique_genes = {};
 num_reactions_per_gene = [];
 list_reactions_per_gene = {};
 
-% Usar un contenedor para evitar duplicados
+% Use a container to avoid duplicates
 gene_reaction_map = containers.Map('KeyType', 'char', 'ValueType', 'any');
 
-% Iterar sobre los genes relevantes
+% Iterate over the relevant genes
 for i = 1:length(relevant_reaction_ncbi_genes)
-    % Separar los genes por ', '
+    % Split the genes by ', '
     genes = strsplit(relevant_reaction_ncbi_genes{i}, ', ');
     for j = 1:length(genes)
         gene = genes{j};
         if isKey(gene_reaction_map, gene)
-            % Si el gen ya está en el mapa, actualizar los contadores
+            % If the gene is already in the map, update the counters
             reactions_set = gene_reaction_map(gene);
             reactions_set = [reactions_set, relevant_rxn_id{i}];
             gene_reaction_map(gene) = unique(reactions_set);
         else
-            % Si el gen no está en el mapa, añadirlo
+            % If the gene is not in the map, add it
             gene_reaction_map(gene) = {relevant_rxn_id{i}};
         end
     end
 end
 
-% Convertir el mapa a celdas para crear la tabla
+% Convert the map to cells to create the table
 unique_genes = keys(gene_reaction_map);
 num_reactions_per_gene = cellfun(@length, values(gene_reaction_map));
 list_reactions_per_gene = cellfun(@(x) strjoin(x, ', '), values(gene_reaction_map), 'UniformOutput', false);
 
-% Crear la tabla Genes
+% Create the Genes table
 summary_genes = table(unique_genes', num_reactions_per_gene', list_reactions_per_gene', ...
     'VariableNames', {'GeneName', 'NumReactions', 'ListReactions'});
 
@@ -300,22 +339,20 @@ summary_table = table(relevant_reactions2', relevant_rxn_id, relevant_rxn_name, 
 
 save('shap_subset_working_environment_2.mat', '-v7.3');
 
-%% Write excel
-filename = 'MM-ML_results_summary_shap_subset.xlsx'; % Guardar las tablas en un archivo Excel con diferentes pestañas
-writetable(summary_table, filename, 'Sheet', 'Summary'); % Guardar la tabla summary_table en la pestaña 'Summary'
-summary_subsystems_split = splitvars(summary_subsystems); % Dividir las variables anidadas en summary_subsystems
-writetable(summary_subsystems_split, filename, 'Sheet', 'Summary_pathways'); % Guardar la tabla subsystems
-writetable(summary_genes, filename, 'Sheet', 'Summary_genes'); % Guardar la tabla genes
-writetable(summary_metabolites, filename, 'Sheet', 'Summary_metabolites'); % Guardar la tabla genes
-writetable(summary_substrates, filename, 'Sheet', 'Summary_substrates'); % Guardar la tabla genes
-writetable(summary_products, filename, 'Sheet', 'Summary_products'); % Guardar la tabla genes
+%% Write Excel
+filename = 'MM-ML_results_summary_shap_subset.xlsx'; % Save the tables in an Excel file with different sheets
+writetable(summary_table, filename, 'Sheet', 'Summary'); % Save the summary_table in the 'Summary' sheet
+summary_subsystems_split = splitvars(summary_subsystems); % Split nested variables in summary_subsystems
+writetable(summary_subsystems_split, filename, 'Sheet', 'Summary_pathways'); % Save the subsystems table
+writetable(summary_genes, filename, 'Sheet', 'Summary_genes'); % Save the genes table
+writetable(summary_metabolites, filename, 'Sheet', 'Summary_metabolites'); % Save the metabolites table
+writetable(summary_substrates, filename, 'Sheet', 'Summary_substrates'); % Save the substrates table
+writetable(summary_products, filename, 'Sheet', 'Summary_products'); % Save the products table
 
 %% Check if the relevant reactions correlate with mortality rate in trauma group
-%folder = '/media/igor/My Passport1/CGSM_Sync/Clinical_Genome-Scale_Modelling-CGSM/Collaboration_Par/01_Trauma-Catecholamines_Cohort_99_Patients/03_Analysis_Individual_Patients/02_Modeling/02_Control_Group_Characterization_&_Trauma_2/Modeling/2_Patient-specific_EC-GEM_long_time_per_node_sampling_ALL/';
-folder = '/media/igor/My Passport/CGSM_Sync/Clinical_Genome-Scale_Modelling-CGSM/Collaboration_Par/01_Trauma-Catecholamines_Cohort_99_Patients/03_Analysis_Individual_Patients/02_Modeling/02_Control_Group_Characterization_&_Trauma_2/Modeling/2_Patient-specific_EC-GEM_long_time_per_node_sampling_ALL/';
+folder = '/';
 
-
-% Listar todos los archivos que comienzan con "modelPatient_Sampled_"
+% List all files starting with "modelPatient_Sampled_"
 files = dir(fullfile(folder, 'modelPatient_Sampled_*.mat'));
 patient_data = table2array(readtable('Patient_Trauma_Groups.xls'));
 
@@ -325,7 +362,7 @@ label = female_label;
 
 sex_idx = find(patient_data(:,4) == label);
 patient_data = patient_data(sex_idx,:);
-indices = [];% Initialize an empty vector to store the corresponding indices
+indices = []; % Initialize an empty vector to store the corresponding indices
 % Loop through the vector of sample numbers
 for i = 1:length(sex_idx)
     sample = sex_idx(i);    
@@ -336,19 +373,19 @@ for i = 1:length(sex_idx)
 end
 files = files(indices);
 
-% Inicializar las celdas para almacenar los nombres de los archivos y las matrices
+% Initialize cells to store file names and matrices
 file_names = cell(length(files), 1);
 points_matrices = cell(length(files), 8);
 
-% Iterar sobre los archivos y cargarlos
+% Iterate over the files and load them
 for i = 1:length(files)    
-    file_path = fullfile(folder, files(i).name); % Construir la ruta completa al archivo  
-    data = load(file_path); % Cargar el archivo .mat   
-    points_matrix = data.sampleMetaOutC.points; % Extraer la matriz points de sampleMetaOutC
+    file_path = fullfile(folder, files(i).name); % Construct the full path to the file  
+    data = load(file_path); % Load the .mat file   
+    points_matrix = data.sampleMetaOutC.points; % Extract the points matrix from sampleMetaOutC
     points_matrix_filtered = points_matrix(relevant_reactions,:);    
     clear points_matrix
     clear data
-    % Extraer las partes del nombre del archivo
+    % Extract parts of the file name
     pattern = 'modelPatient_Sampled_(\d+)_([a-zA-Z]+)';
     tokens = regexp(files(i).name, pattern, 'tokens');
     patient = str2num(tokens{1}{1});
@@ -364,7 +401,7 @@ for i = 1:length(files)
     metabogroup = patient_data(patient_index_in_table_data,2);
     age = patient_data(patient_index_in_table_data,3);
     sex = patient_data(patient_index_in_table_data,4); 
-    % Guardar el nombre del archivo y la matriz points en las celdas
+    % Save the file name and points matrix in the cells
     points_matrices{patient,1} = patient;
     points_matrices{patient,2} = metabogroup;
     points_matrices{patient,3} = age;
@@ -384,7 +421,7 @@ end
 % Generate unique matrix with all solutions and the corresponding labels
 total_points = size(points_matrices{1, 9}, 2);
 
-% Calcular la suma de las distancias euclidianas para cada columna
+% Calculate the sum of Euclidean distances for each column
 num_labels = length(files)/3;
 euclidean_sum = zeros(num_labels, total_points);
 index_sum = euclidean_sum;
@@ -444,7 +481,7 @@ for i = 1:num_labels
    end_idx = i * change_idx;
    labels(start_idx:end_idx) = {sprintf('%s', ith_label)};
    selected_points = points_matrices_test{i, 10};
-   result_matrix = [result_matrix, selected_points]; % Concatenar la matriz 
+   result_matrix = [result_matrix, selected_points]; % Concatenate the matrix 
 end
 
 %% MIN
@@ -636,7 +673,7 @@ for i = 1:num_labels
    end_idx = i * points_per_sample;
    labels(start_idx:end_idx) = {sprintf('%s', ith_label)};
    selected_points = points_matrices_test_3{i, 12};
-   result_matrix_all = [result_matrix_all, selected_points]; % Concatenar la matriz 
+   result_matrix_all = [result_matrix_all, selected_points]; % Concatenate the matrix 
 end
 
 % Plot all points mean of min, mean and max
@@ -656,7 +693,7 @@ for i = 1:num_labels
    end_idx = i * points_per_sample_all_mean;
    labels_all_mean(start_idx:end_idx) = {sprintf('%s', ith_label)};
    selected_points = points_matrices_test_4{i, 13};
-   result_matrix_all_mean = [result_matrix_all_mean, selected_points]; % Concatenar la matriz 
+   result_matrix_all_mean = [result_matrix_all_mean, selected_points]; % Concatenate the matrix 
 end
 
 points_matrices_test_5 = points_matrices_test_4;
@@ -675,14 +712,14 @@ for i = 1:num_labels
    end_idx = i * points_per_sample_all_mean_mean;
    labels_all_mean_mean(start_idx:end_idx) = {sprintf('%s', ith_label)};
    selected_points = points_matrices_test_5{i, 14};
-   result_matrix_all_mean_mean = [result_matrix_all_mean_mean, selected_points]; % Concatenar la matriz 
+   result_matrix_all_mean_mean = [result_matrix_all_mean_mean, selected_points]; % Concatenate the matrix 
 end
 
 save('shap_subset_working_environment_2.mat', '-v7.3');
 
 %% Save variables in files to be used in Python for example
-csvwrite('result_matrix.csv', result_matrix); % Exportar la matriz resultante a un archivo CSV
-csvwrite('result_matrix_all.csv', result_matrix_all); % Exportar la matriz resultante a un archivo CSV
+csvwrite('result_matrix.csv', result_matrix); % Export the resulting matrix to a CSV file
+csvwrite('result_matrix_all.csv', result_matrix_all); % Export the resulting matrix to a CSV file
 flattenedArray = labels(:); % Flatten the cell array to a single column
 labels_all_mean_2 = string(labels_all_mean(:));
 labels_all_mean_3 = string(labels_all_mean_mean(:));
@@ -750,11 +787,9 @@ hold off;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%% Treatment simulation %%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% Determine the 
 
-% reactions of interest
+%%% Determine the reactions of interest
 relevant_intracel_reactions = [7, 22, 23, 34, 2, 19, 29];
-
 
 group_1 = points_matrices_test_5(find([points_matrices_test_5{:,2}] == 1),:);
 [n_patient_1, ~] =  size(group_1);
@@ -793,33 +828,3 @@ end
 %min_val_4 = min(min_val_4, [], 2);
 max_val_4 = mean(max_val_4, 2);
 min_val_4 = mean(min_val_4, 2);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-%% Explore the role of DRD1
-gene_of_interest = 'DRD1';
-index = find(ismember(summary_genes.GeneName, gene_of_interest));
-reaction_set_of_interest = strsplit(summary_genes.ListReactions{index}, ',');
-
-reaction_set_of_interest_index = [];
-for i = 1:length(reaction_set_of_interest)
-    ith_reaction = find(ismember(sampleMetaOutC.rxns, strrep(reaction_set_of_interest{i}, ' ', '')));
-    reaction_set_of_interest_index(i) = ith_reaction;
-end
-
-%% Explore the role of DRD1
-
