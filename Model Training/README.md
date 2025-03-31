@@ -36,8 +36,3 @@ This repository contains a multi-step pipeline for patient classification based 
 
 ## 📊 Why Use SHAP-Based Feature Selection?  
 SHAP values offer a robust method for interpreting machine learning models, ensuring that only the most informative features are used for classification. This enhances both model performance and interpretability.  
-
-## 🚀 How to Run  
-1. **Preprocess the data**  
-   ```bash
-   python 1_patient_classification_pipeline.py
