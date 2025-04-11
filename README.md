@@ -1,8 +1,8 @@
-# Integrating Machine Learning with Genome-Scale Metabolic Models for Precision Trauma Care
+# Mechanistic Machine Learning Uncovers Metabolic Switch Reactions Underlying Trauma Endotypes
 
 Overview
 
-This repository contains the code used in the article "Integrating Machine Learning with Genome-Scale Metabolic Models for Precision Trauma Care: Personalized ENDOTYPE Stratification and Metabolic Target Identification."
+This repository contains the code used in the article "Mechanistic Machine Learning Uncovers Metabolic Switch Reactions Underlying Trauma Endotypes".
 
 The project integrates machine learning (ML) with genome-scale metabolic models (GEMs) to advance precision trauma care. By leveraging computational models, it enables personalized ENDOTYPE stratification and helps identify metabolic targets tailored to individual patient profiles.
 
