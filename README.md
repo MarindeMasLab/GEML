@@ -1,8 +1,9 @@
-# Mechanistic Machine Learning Uncovers Metabolic Switch Reactions Underlying Trauma Endotypes
+# Mechanistic Machine Learning Reveals Metabolic Alterations Driving Personalized Trauma ENDOTYPE Stratification and Therapeutic Target Discovery
 
 Overview
 
-This repository contains the code used in the article "Mechanistic Machine Learning Uncovers Metabolic Switch Reactions Underlying Trauma Endotypes".
+This repository contains the code used in the article "Mechanistic Machine Learning Reveals Metabolic Alterations Driving Personalized Trauma
+ENDOTYPE Stratification and Therapeutic Target Discovery".
 
 The project integrates machine learning (ML) with genome-scale metabolic models (GEMs) to advance precision trauma care. By leveraging computational models, it enables personalized ENDOTYPE stratification and helps identify metabolic targets tailored to individual patient profiles.
 
